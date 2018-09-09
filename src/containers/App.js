@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Input from './../components/inputTodo';
-import SelectCategory from './selectCategory';
-import '../App.css';
+import Input from "./../components/inputTodo";
+import SelectCategory from "./selectCategory";
+import "../App.css";
 
 class App extends Component {
   constructor() {
@@ -10,29 +10,30 @@ class App extends Component {
     this.state = {
       todos: [],
       idTodo: 0,
-      todoInput: '',
-      currentTodo: [],
+      todoInput: "",
       valueTab: 0,
-    }
+      valueChecked: []
+    };
 
-    this.addTodo = this.addTodo.bind(this);
     this.onChangeValueInputTodo = this.onChangeValueInputTodo.bind(this);
-    this.keyPressInput = this.keyPressInput.bind(this);
-    this.deleteTodo = this.deleteTodo.bind(this);
-    this.changeArray = this.changeArray.bind(this);
-    this.handleChangeTab = this.handleChangeTab.bind(this);
     this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
-  };
+    this.changeValueCheck = this.changeValueCheck.bind(this);
+    this.handleChangeTab = this.handleChangeTab.bind(this);
+    this.updateCheckbox = this.updateCheckbox.bind(this);
+    this.keyPressInput = this.keyPressInput.bind(this);
+    this.changeArray = this.changeArray.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+    this.addTodo = this.addTodo.bind(this);
+  }
 
   onChangeValueInputTodo(event) {
-    this.setState(
-      {
-        todoInput: event.target.value
-      })
+    this.setState({
+      todoInput: event.target.value
+    });
   }
 
   keyPressInput(event) {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       return this.addTodo();
     }
   }
@@ -40,18 +41,18 @@ class App extends Component {
   addTodo() {
     let newId = this.state.idTodo;
 
-    if (this.state.todoInput.trim() !== '') {
+    if (this.state.todoInput.trim() !== "") {
       const todo = {
         value: this.state.todoInput,
         completed: false,
         id: ++newId
-      }
+      };
       this.setState({
         todos: [...this.state.todos, todo],
         idTodo: todo.id,
-        todoInput: ''
-      })
-    };
+        todoInput: ""
+      });
+    }
   }
 
   deleteTodo(event, index) {
@@ -64,58 +65,94 @@ class App extends Component {
     });
   }
 
-  handleChangeTab = (event, valueTab) => {
+  handleChangeTab(event, valueTab) {
     this.setState({ valueTab });
-    return this.changeArray(valueTab);
-  };
+  }
 
-  handleToggleCheckbox = (valueIndexTodo) => {
+  handleToggleCheckbox(valueIndexTodo) {
     const newArray = this.state.todos;
-    if(newArray[valueIndexTodo].completed) {
+    if (newArray[valueIndexTodo].completed) {
       newArray[valueIndexTodo].completed = false;
     } else {
       newArray[valueIndexTodo].completed = true;
     }
     this.setState({
       todos: newArray
-    })
+    });
   }
 
-  changeArray(valueArray) {
-    let newArray = this.state.todos;
+  updateCheckbox(newChecked, valueTodoIndex) {
+    this.setState(
+      {
+        valueChecked: newChecked
+      },
+      () => this.handleToggleCheckbox(valueTodoIndex)
+    );
+  }
 
-    switch (valueArray) {
+  changeArray(valueTab) {
+    let newArray = this.state.todos;
+    switch (valueTab) {
       case 0:
-        newArray = this.state.todos
-        break
+        newArray = this.state.todos;
+        break;
       case 1:
-        newArray = newArray.filter((todo) => todo.completed)
-        break
+        newArray = newArray.filter(todo => todo.completed);
+        break;
       case 2:
-        newArray = newArray.filter((todo) => !todo.completed)
-        break
+        newArray = newArray.filter(todo => !todo.completed);
+        break;
       default:
     }
     return newArray;
+  }
+
+  changeValueCheck() {
+    let todos = this.state.todos;
+    let newArrayCheck = [];
+    let completed = [];
+
+    switch (this.state.valueTab) {
+      case 0:
+        todos.forEach(todo => {
+          if (todo.completed) {
+            newArrayCheck.push(todos.indexOf(todo));
+          }
+        });
+        break;
+      case 1:
+        completed = todos.filter(todo => todo.completed);
+        completed.forEach(todo => {
+          newArrayCheck.push(completed.indexOf(todo));
+        });
+        break;
+      case 2:
+        newArrayCheck;
+        break;
+      default:
+    }
+    return newArrayCheck;
   }
 
   render() {
     return (
       <div className="App">
         <h2>To Do List</h2>
-        <Input callbackAddTodo={this.addTodo}
+        <Input
+          callbackAddTodo={this.addTodo}
           valueTodo={this.state.todoInput}
           callbackValueTodo={this.onChangeValueInputTodo}
           callbackKeyPress={this.keyPressInput}
         />
-        <SelectCategory todos={this.changeArray(this.state.valueTab)
-        }
+        <SelectCategory
+          todos={this.changeArray(this.state.valueTab)}
           callbackDeleteTodo={this.deleteTodo}
           callbackChangeCategory={this.changeArray}
           valueTab={this.state.valueTab}
-          callbackChangeTab={this.handleChangeTab} 
-          callbackToggleCheckbox={this.handleToggleCheckbox}
-          />
+          callbackChangeTab={this.handleChangeTab}
+          valueCheck={this.changeValueCheck(this.state.valueChecked)}
+          callbackUpdateCheckbox={this.updateCheckbox}
+        />
       </div>
     );
   }

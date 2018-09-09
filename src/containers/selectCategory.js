@@ -23,8 +23,8 @@ const SelectCategory = props => {
         callbackDeleteTodo={props.callbackDeleteTodo}
         callbackToggleCheckbox={props.callbackToggleCheckbox}
         value={props.valueTab}
-        checkedTodo={props.checkedTodo}
-        callbackHandleToggle={props.callbackHandleToggle}
+        valueCheck={props.valueCheck}
+        callbackUpdateCheckbox={props.callbackUpdateCheckbox}
       />
     </Paper>
   );

@@ -11,29 +11,20 @@ import List from "@material-ui/core/List";
 class TodoList extends Component {
   constructor() {
     super();
-    this.state = {
-      checked: []
-    };
   }
 
   handleToggle = value => () => {
-    const { checked } = this.state;
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    const { valueCheck } = this.props;
+    const currentIndex = valueCheck.indexOf(value);
+    const newChecked = [...valueCheck];
     
-    console.log(this.props.todos[value]);
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
       newChecked.splice(currentIndex, 1);
     }
+    this.props.callbackUpdateCheckbox(newChecked, value);
 
-    this.setState(
-      {
-        checked: newChecked
-      },
-      () => this.props.callbackToggleCheckbox(value)
-    );
   };
 
   render() {
@@ -50,7 +41,7 @@ class TodoList extends Component {
               onClick={this.handleToggle(index)}
             >
               <Checkbox
-                checked={this.state.checked.indexOf(index) !== -1}
+                checked={this.props.valueCheck.indexOf(index) !== -1}
                 tabIndex={-1}
                 disableRipple
                 color="primary"
