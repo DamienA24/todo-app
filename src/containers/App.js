@@ -14,9 +14,10 @@ class App extends Component {
       currentTodo: []
     }
 
-    this.addTodo = this.addTodo.bind(this);  
+    this.addTodo = this.addTodo.bind(this);
     this.onChangeValueTodo = this.onChangeValueTodo.bind(this);
     this.keyPressInput = this.keyPressInput.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
   };
 
   onChangeValueTodo(event) {
@@ -27,7 +28,7 @@ class App extends Component {
   }
 
   keyPressInput(event) {
-    if(event.key === 'Enter') {
+    if (event.key === 'Enter') {
       return this.addTodo();
     }
   }
@@ -36,26 +37,38 @@ class App extends Component {
     const todo = {
       value: this.state.todoInput,
       completed: false,
-      id: ++this.state.idTodo    
+      id: ++this.state.idTodo
     }
 
     this.setState({
       todos: [...this.state.todos, todo],
       idTodo: todo.id,
-      todoInput:''
+      todoInput: ''
     }, () => console.log("todos: ", this.state.todos))
   };
+
+  deleteTodo(event, index) {
+    event.preventDefault();
+    const newArr = this.state.todos;
+    newArr.splice(index, 1);
+
+    this.setState({
+      todos: newArr
+    });
+
+  }
 
   render() {
     return (
       <div className="App">
-      <h2>To Do List</h2>
-        <Input callbackAddTodo={this.addTodo} 
-               valueTodo={this.state.todoInput}
-               callbackValueTodo={this.onChangeValueTodo}
-               callbackKeyPress={this.keyPressInput}
-        />            
-        <TodoList todos={this.state.todos}/>
+        <h2>To Do List</h2>
+        <Input callbackAddTodo={this.addTodo}
+          valueTodo={this.state.todoInput}
+          callbackValueTodo={this.onChangeValueTodo}
+          callbackKeyPress={this.keyPressInput}
+        />
+        <TodoList todos={this.state.todos}
+          callbackDeleteTodo={this.deleteTodo} />
       </div>
     );
   }

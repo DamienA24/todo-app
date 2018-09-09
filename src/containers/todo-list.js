@@ -53,7 +53,7 @@ class TodoList extends Component {
                 color="primary"
               />
               <ListItemText primary={todo.value} />
-              <ListItemSecondaryAction onClick={() => alert("test")}>
+              <ListItemSecondaryAction onClick={e => this.props.callbackDeleteTodo(e, index)}>
               <Button color="secondary">
                 <DeleteIcon />
               </Button>

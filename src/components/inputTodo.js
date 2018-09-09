@@ -28,8 +28,8 @@ const Inputs = (props) => {
         onChange={props.callbackValueTodo}
         onKeyPress={props.callbackKeyPress}
       />
-       <Button variant="fab" size="small" color="primary" aria-label="Add" className={classes.button}
-       onClick={props.callbackAddTodo}>
+      <Button variant="fab" size="small" color="primary" aria-label="Add" className={classes.button}
+        onClick={props.callbackAddTodo}>
         <AddIcon />
       </Button>
     </div>
