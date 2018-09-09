@@ -26,6 +26,7 @@ const Inputs = (props) => {
         placeholder="Add your ToDo"
         value={props.valueTodo}
         onChange={props.callbackValueTodo}
+        onKeyPress={props.callbackKeyPress}
       />
        <Button variant="fab" size="small" color="primary" aria-label="Add" className={classes.button}
        onClick={props.callbackAddTodo}>

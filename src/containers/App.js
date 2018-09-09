@@ -16,6 +16,7 @@ class App extends Component {
 
     this.addTodo = this.addTodo.bind(this);  
     this.onChangeValueTodo = this.onChangeValueTodo.bind(this);
+    this.keyPressInput = this.keyPressInput.bind(this);
   };
 
   onChangeValueTodo(event) {
@@ -23,6 +24,12 @@ class App extends Component {
       {
         todoInput: event.target.value
       })
+  }
+
+  keyPressInput(event) {
+    if(event.key === 'Enter') {
+      return this.addTodo();
+    }
   }
 
   addTodo() {
@@ -46,6 +53,7 @@ class App extends Component {
         <Input callbackAddTodo={this.addTodo} 
                valueTodo={this.state.todoInput}
                callbackValueTodo={this.onChangeValueTodo}
+               callbackKeyPress={this.keyPressInput}
         />            
         <TodoList todos={this.state.todos}/>
       </div>
