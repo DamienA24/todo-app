@@ -12,18 +12,19 @@ class App extends Component {
       idTodo: 0,
       todoInput: '',
       currentTodo: [],
-      valueTab: 0
+      valueTab: 0,
     }
 
     this.addTodo = this.addTodo.bind(this);
-    this.onChangeValueTodo = this.onChangeValueTodo.bind(this);
+    this.onChangeValueInputTodo = this.onChangeValueInputTodo.bind(this);
     this.keyPressInput = this.keyPressInput.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
     this.changeArray = this.changeArray.bind(this);
-    this.HandleChangeTab = this.HandleChangeTab.bind(this);
+    this.handleChangeTab = this.handleChangeTab.bind(this);
+    this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
   };
 
-  onChangeValueTodo(event) {
+  onChangeValueInputTodo(event) {
     this.setState(
       {
         todoInput: event.target.value
@@ -63,10 +64,22 @@ class App extends Component {
     });
   }
 
-  HandleChangeTab = (event, valueTab) => {
+  handleChangeTab = (event, valueTab) => {
     this.setState({ valueTab });
     return this.changeArray(valueTab);
   };
+
+  handleToggleCheckbox = (valueIndexTodo) => {
+    const newArray = this.state.todos;
+    if(newArray[valueIndexTodo].completed) {
+      newArray[valueIndexTodo].completed = false;
+    } else {
+      newArray[valueIndexTodo].completed = true;
+    }
+    this.setState({
+      todos: newArray
+    })
+  }
 
   changeArray(valueArray) {
     let newArray = this.state.todos;
@@ -92,7 +105,7 @@ class App extends Component {
         <h2>To Do List</h2>
         <Input callbackAddTodo={this.addTodo}
           valueTodo={this.state.todoInput}
-          callbackValueTodo={this.onChangeValueTodo}
+          callbackValueTodo={this.onChangeValueInputTodo}
           callbackKeyPress={this.keyPressInput}
         />
         <SelectCategory todos={this.changeArray(this.state.valueTab)
@@ -100,7 +113,9 @@ class App extends Component {
           callbackDeleteTodo={this.deleteTodo}
           callbackChangeCategory={this.changeArray}
           valueTab={this.state.valueTab}
-          callbackChangeTab={this.HandleChangeTab} />
+          callbackChangeTab={this.handleChangeTab} 
+          callbackToggleCheckbox={this.handleToggleCheckbox}
+          />
       </div>
     );
   }
