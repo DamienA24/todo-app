@@ -46,9 +46,8 @@ class App extends Component {
         <Input callbackAddTodo={this.addTodo} 
                valueTodo={this.state.todoInput}
                callbackValueTodo={this.onChangeValueTodo}
-        />
-              
-        <TodoList />
+        />            
+        <TodoList todos={this.state.todos}/>
       </div>
     );
   }

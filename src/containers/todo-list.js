@@ -9,8 +9,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 
-
-
 class TodoList extends Component {
   constructor() {
     super();
@@ -19,7 +17,6 @@ class TodoList extends Component {
     }
   }
   
-
   handleToggle = value => () => {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
@@ -41,21 +38,21 @@ class TodoList extends Component {
       <div>
         <SelectCategory />
         <List>
-        {[0, 1, 2, 3].map(value => (
+        {this.props.todos.map((todo, index) => (
             <ListItem
-              key={value}
+              key={index}
               role={undefined}
               dense
               button
-              onClick={this.handleToggle(value)}
+              onClick={this.handleToggle(index)}
             >
               <Checkbox
-                checked={this.state.checked.indexOf(value) !== -1}
+                checked={this.state.checked.indexOf(index) !== -1}
                 tabIndex={-1}
                 disableRipple
                 color="primary"
               />
-              <ListItemText primary={`Line item ${value + 1}`} />
+              <ListItemText primary={todo.value} />
               <ListItemSecondaryAction onClick={() => alert("test")}>
               <Button color="secondary">
                 <DeleteIcon />
