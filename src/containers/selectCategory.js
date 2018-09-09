@@ -13,19 +13,14 @@ class SelectCategory extends Component {
     };
   }
 
-
-  handleChange = (event, valueTab) => {
-    this.setState({ valueTab });
-  };
-
   render() {
     return (
       <Paper square>
         <Tabs
-          value={this.state.valueTab}
+          value={this.props.valueTab}
           indicatorColor="primary"
           textColor="primary"
-          onChange={this.handleChange}
+          onChange={this.props.callbackChangeTab}
         >
           <Tab label="All" />
           <Tab label="Completed" />

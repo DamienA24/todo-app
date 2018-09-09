@@ -4,7 +4,6 @@ import Input from './../components/inputTodo';
 import SelectCategory from './selectCategory';
 import '../App.css';
 
-
 class App extends Component {
   constructor() {
     super();
@@ -12,13 +11,16 @@ class App extends Component {
       todos: [],
       idTodo: 0,
       todoInput: '',
-      currentTodo: []
+      currentTodo: [],
+      valueTab: 0
     }
 
     this.addTodo = this.addTodo.bind(this);
     this.onChangeValueTodo = this.onChangeValueTodo.bind(this);
     this.keyPressInput = this.keyPressInput.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+    this.changeArray = this.changeArray.bind(this);
+    this.HandleChangeTab = this.HandleChangeTab.bind(this);
   };
 
   onChangeValueTodo(event) {
@@ -35,21 +37,21 @@ class App extends Component {
   }
 
   addTodo() {
+    let newId = this.state.idTodo;
+
     if (this.state.todoInput.trim() !== '') {
       const todo = {
         value: this.state.todoInput,
         completed: false,
-        id: ++this.state.idTodo
+        id: ++newId
       }
-
       this.setState({
         todos: [...this.state.todos, todo],
         idTodo: todo.id,
         todoInput: ''
-      }, () => console.log("todos: ", this.state.todos))
+      })
     };
   }
-
 
   deleteTodo(event, index) {
     event.preventDefault();
@@ -59,7 +61,29 @@ class App extends Component {
     this.setState({
       todos: newArr
     });
+  }
 
+  HandleChangeTab = (event, valueTab) => {
+    this.setState({ valueTab });
+    return this.changeArray(valueTab);
+  };
+
+  changeArray(valueArray) {
+    let newArray = this.state.todos;
+
+    switch (valueArray) {
+      case 0:
+        newArray = this.state.todos
+        break
+      case 1:
+        newArray = newArray.filter((todo) => todo.completed)
+        break
+      case 2:
+        newArray = newArray.filter((todo) => !todo.completed)
+        break
+      default:
+    }
+    return newArray;
   }
 
   render() {
@@ -71,9 +95,12 @@ class App extends Component {
           callbackValueTodo={this.onChangeValueTodo}
           callbackKeyPress={this.keyPressInput}
         />
-        <SelectCategory todos={this.state.todos}
-        callbackDeleteTodo={this.deleteTodo}/>
-        
+        <SelectCategory todos={this.changeArray(this.state.valueTab)
+        }
+          callbackDeleteTodo={this.deleteTodo}
+          callbackChangeCategory={this.changeArray}
+          valueTab={this.state.valueTab}
+          callbackChangeTab={this.HandleChangeTab} />
       </div>
     );
   }
