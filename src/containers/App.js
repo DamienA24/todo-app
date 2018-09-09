@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import Input from './../components/inputTodo';
-import TodoList from './todo-list';
+import SelectCategory from './selectCategory';
 import '../App.css';
+
 
 class App extends Component {
   constructor() {
@@ -34,7 +35,7 @@ class App extends Component {
   }
 
   addTodo() {
-    if (this.state.todoInput.trim() != '') {
+    if (this.state.todoInput.trim() !== '') {
       const todo = {
         value: this.state.todoInput,
         completed: false,
@@ -70,8 +71,9 @@ class App extends Component {
           callbackValueTodo={this.onChangeValueTodo}
           callbackKeyPress={this.keyPressInput}
         />
-        <TodoList todos={this.state.todos}
-          callbackDeleteTodo={this.deleteTodo} />
+        <SelectCategory todos={this.state.todos}
+        callbackDeleteTodo={this.deleteTodo}/>
+        
       </div>
     );
   }

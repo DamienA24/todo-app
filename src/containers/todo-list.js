@@ -1,7 +1,6 @@
 import React, { Component }  from 'react';
 
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import SelectCategory from '../components/selectCategory';
 import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ListItem from '@material-ui/core/ListItem';
@@ -21,11 +20,14 @@ class TodoList extends Component {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
+    console.log(this.props.todos[value]);
 
     if (currentIndex === -1) {
       newChecked.push(value);
+      this.props.todos[value].completed = true;  
     } else {
       newChecked.splice(currentIndex, 1);
+      this.props.todos[value].completed = false;  
     }
 
     this.setState({
@@ -36,7 +38,6 @@ class TodoList extends Component {
   render() {
     return (
       <div>
-        <SelectCategory />
         <List>
         {this.props.todos.map((todo, index) => (
             <ListItem
