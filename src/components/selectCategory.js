@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-class SelectCategory extends React.Component {
+class SelectCategory extends Component {
   state = {
     valueTab: 0,
   };
@@ -22,7 +22,7 @@ class SelectCategory extends React.Component {
           onChange={this.handleChange}
         >
           <Tab label="All" />
-          <Tab label="Completed"/>
+          <Tab label="Completed" />
           <Tab label="Active" />
         </Tabs>
       </Paper>

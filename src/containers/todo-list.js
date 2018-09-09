@@ -41,7 +41,6 @@ class TodoList extends Component {
         {this.props.todos.map((todo, index) => (
             <ListItem
               key={index}
-              role={undefined}
               dense
               button
               onClick={this.handleToggle(index)}

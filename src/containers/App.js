@@ -34,18 +34,21 @@ class App extends Component {
   }
 
   addTodo() {
-    const todo = {
-      value: this.state.todoInput,
-      completed: false,
-      id: ++this.state.idTodo
-    }
+    if (this.state.todoInput.trim() != '') {
+      const todo = {
+        value: this.state.todoInput,
+        completed: false,
+        id: ++this.state.idTodo
+      }
 
-    this.setState({
-      todos: [...this.state.todos, todo],
-      idTodo: todo.id,
-      todoInput: ''
-    }, () => console.log("todos: ", this.state.todos))
-  };
+      this.setState({
+        todos: [...this.state.todos, todo],
+        idTodo: todo.id,
+        todoInput: ''
+      }, () => console.log("todos: ", this.state.todos))
+    };
+  }
+
 
   deleteTodo(event, index) {
     event.preventDefault();
