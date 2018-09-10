@@ -9,6 +9,7 @@ class App extends Component {
     super();
     this.state = {
       todos: [],
+      currentTodo: [],
       idTodo: 0,
       todoInput: "",
       valueTab: 0,
@@ -51,6 +52,10 @@ class App extends Component {
         todos: [...this.state.todos, todo],
         idTodo: todo.id,
         todoInput: ""
+      }, () => {
+        if (this.state.valueTab !== 1) {
+          this.setState({currentTodo: this.state.todos})
+        }
       });
     }
   }
@@ -66,19 +71,26 @@ class App extends Component {
   }
 
   handleChangeTab(event, valueTab) {
-    this.setState({ valueTab });
+    this.setState({ valueTab }, () => this.changeArray(valueTab));
   }
 
   handleToggleCheckbox(valueIndexTodo) {
-    const newArray = this.state.todos;
+    let newArray = this.state.currentTodo;
     if (newArray[valueIndexTodo].completed) {
       newArray[valueIndexTodo].completed = false;
     } else {
       newArray[valueIndexTodo].completed = true;
     }
+
+    if(this.state.valueTab === 1) {
+      newArray = newArray.filter((todo) => todo.completed)
+    } else if (this.state.valueTab === 2) {
+      newArray = newArray.filter((todo) => !todo.completed)
+    }
+
     this.setState({
-      todos: newArray
-    });
+      currentTodo: newArray
+    },() => this.changeValueCheck());
   }
 
   updateCheckbox(newChecked, valueTodoIndex) {
@@ -104,11 +116,11 @@ class App extends Component {
         break;
       default:
     }
-    return newArray;
+    this.setState({currentTodo: newArray}, () => this.changeValueCheck());
   }
 
   changeValueCheck() {
-    let todos = this.state.todos;
+    let todos = this.state.currentTodo;
     let newArrayCheck = [];
     let completed = [];
 
@@ -131,7 +143,7 @@ class App extends Component {
         break;
       default:
     }
-    return newArrayCheck;
+    this.setState({valueChecked: newArrayCheck})
   }
 
   render() {
@@ -145,12 +157,12 @@ class App extends Component {
           callbackKeyPress={this.keyPressInput}
         />
         <SelectCategory
-          todos={this.changeArray(this.state.valueTab)}
+          todos={this.state.currentTodo}
           callbackDeleteTodo={this.deleteTodo}
           callbackChangeCategory={this.changeArray}
           valueTab={this.state.valueTab}
           callbackChangeTab={this.handleChangeTab}
-          valueCheck={this.changeValueCheck(this.state.valueChecked)}
+          valueCheck={this.state.valueChecked}
           callbackUpdateCheckbox={this.updateCheckbox}
         />
       </div>
