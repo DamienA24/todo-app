@@ -28,8 +28,6 @@ class TodoList extends Component {
   };
 
   render() {
-    console.log(this.props);
-
     return (
       <div>
         <List>
