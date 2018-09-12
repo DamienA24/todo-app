@@ -5,7 +5,7 @@ const api = async (method = "get", data = {}, url = "/todos") => {
     method: method,
     url: url
   };
-  if (method === "post" || method === "patch") {
+  if (method === "post" || method === "put") {
     option.data = data;
   }
   return await axios(option);

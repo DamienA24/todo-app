@@ -13,7 +13,7 @@ class TodoList extends Component {
     super();
   }
 
-  handleToggle = value => () => {
+  handleToggle = (value) => () => {
     const { valueCheck } = this.props;
     const currentIndex = valueCheck.indexOf(value);
     const newChecked = [...valueCheck];
@@ -45,7 +45,7 @@ class TodoList extends Component {
               />
               <ListItemText primary={todo.text} />
               <ListItemSecondaryAction
-                onClick={e => this.props.callbackDeleteTodo(e, index)}
+                onClick={e => this.props.callbackDeleteTodo(e, index, todo)}
               >
                 <Button color="secondary">
                   <DeleteIcon />

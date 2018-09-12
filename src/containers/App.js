@@ -70,9 +70,11 @@ class App extends Component {
     }
   }
 
-  deleteTodo(event, index) {
+  deleteTodo(event, index, todo) {
     event.preventDefault();
     const newArr = this.state.todos;
+    const url = `todos/${todo.id}`;
+    api("delete", todo, url);
     newArr.splice(index, 1);
 
     this.setState({
@@ -91,6 +93,9 @@ class App extends Component {
     } else {
       newArray[valueIndexTodo].completed = true;
     }
+    const todo = newArray[valueIndexTodo]
+    const url = `todos/${todo.id}`;
+    api("put", todo, url);
 
     if (this.state.valueTab === 1) {
       newArray = newArray.filter(todo => todo.completed);
@@ -107,6 +112,7 @@ class App extends Component {
   }
 
   updateCheckbox(newChecked, valueTodoIndex) {
+    
     this.setState(
       {
         valueChecked: newChecked
