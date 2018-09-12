@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import Input from "./../components/inputTodo";
+import axios from "axios";
 import SelectCategory from "./selectCategory";
 import "../App.css";
 
@@ -21,10 +22,21 @@ class App extends Component {
     this.changeValueCheck = this.changeValueCheck.bind(this);
     this.handleChangeTab = this.handleChangeTab.bind(this);
     this.updateCheckbox = this.updateCheckbox.bind(this);
+    this.callBackendAPI = this.callBackendAPI.bind(this);
     this.keyPressInput = this.keyPressInput.bind(this);
     this.changeArray = this.changeArray.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
     this.addTodo = this.addTodo.bind(this);
+  }
+
+  componentDidMount() {
+    this.callBackendAPI()
+  }
+  callBackendAPI() {
+    axios.get('/todos')
+    .then((res) => {
+      this.setState({todos: res.data.results[0]})
+    })
   }
 
   onChangeValueInputTodo(event) {
@@ -48,15 +60,18 @@ class App extends Component {
         completed: false,
         id: ++newId
       };
-      this.setState({
-        todos: [...this.state.todos, todo],
-        idTodo: todo.id,
-        todoInput: ""
-      }, () => {
-        if (this.state.valueTab !== 1) {
-          this.setState({currentTodo: this.state.todos})
+      this.setState(
+        {
+          todos: [...this.state.todos, todo],
+          idTodo: todo.id,
+          todoInput: ""
+        },
+        () => {
+          if (this.state.valueTab !== 1) {
+            this.setState({ currentTodo: this.state.todos });
+          }
         }
-      });
+      );
     }
   }
 
@@ -82,15 +97,18 @@ class App extends Component {
       newArray[valueIndexTodo].completed = true;
     }
 
-    if(this.state.valueTab === 1) {
-      newArray = newArray.filter((todo) => todo.completed)
+    if (this.state.valueTab === 1) {
+      newArray = newArray.filter(todo => todo.completed);
     } else if (this.state.valueTab === 2) {
-      newArray = newArray.filter((todo) => !todo.completed)
+      newArray = newArray.filter(todo => !todo.completed);
     }
 
-    this.setState({
-      currentTodo: newArray
-    },() => this.changeValueCheck());
+    this.setState(
+      {
+        currentTodo: newArray
+      },
+      () => this.changeValueCheck()
+    );
   }
 
   updateCheckbox(newChecked, valueTodoIndex) {
@@ -116,7 +134,7 @@ class App extends Component {
         break;
       default:
     }
-    this.setState({currentTodo: newArray}, () => this.changeValueCheck());
+    this.setState({ currentTodo: newArray }, () => this.changeValueCheck());
   }
 
   changeValueCheck() {
@@ -143,7 +161,7 @@ class App extends Component {
         break;
       default:
     }
-    this.setState({valueChecked: newArrayCheck})
+    this.setState({ valueChecked: newArrayCheck });
   }
 
   render() {

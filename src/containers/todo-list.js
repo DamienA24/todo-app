@@ -44,7 +44,7 @@ class TodoList extends Component {
                 disableRipple
                 color="primary"
               />
-              <ListItemText primary={todo.value} />
+              <ListItemText primary={todo.text} />
               <ListItemSecondaryAction
                 onClick={e => this.props.callbackDeleteTodo(e, index)}
               >
