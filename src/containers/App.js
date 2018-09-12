@@ -33,9 +33,7 @@ class App extends Component {
     this.callBackendAPI();
   }
   callBackendAPI() {
-    api().then(data => console.log(data));
-    //console.log("appel :", getApi);
-    //this.setState({ todos: getApi });
+    api().then(results => this.setState({ todos: results.data.results[0] }));
   }
 
   onChangeValueInputTodo(event) {
@@ -56,7 +54,7 @@ class App extends Component {
         text: this.state.todoInput,
         completed: false
       };
-
+      api("post", todo);
       this.setState(
         {
           todos: [...this.state.todos, todo],
