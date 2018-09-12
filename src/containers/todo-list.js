@@ -17,14 +17,13 @@ class TodoList extends Component {
     const { valueCheck } = this.props;
     const currentIndex = valueCheck.indexOf(value);
     const newChecked = [...valueCheck];
-    
+
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
       newChecked.splice(currentIndex, 1);
     }
     this.props.callbackUpdateCheckbox(newChecked, value);
-
   };
 
   render() {

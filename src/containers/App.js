@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import api from "./../callApi/api";
 
 import Input from "./../components/inputTodo";
-import axios from "axios";
 import SelectCategory from "./selectCategory";
 import "../App.css";
 
@@ -30,13 +30,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.callBackendAPI()
+    this.callBackendAPI();
   }
   callBackendAPI() {
-    axios.get('/todos')
-    .then((res) => {
-      this.setState({todos: res.data.results[0]})
-    })
+    api().then(data => console.log(data));
+    //console.log("appel :", getApi);
+    //this.setState({ todos: getApi });
   }
 
   onChangeValueInputTodo(event) {
@@ -52,22 +51,20 @@ class App extends Component {
   }
 
   addTodo() {
-    let newId = this.state.idTodo;
-
     if (this.state.todoInput.trim() !== "") {
       const todo = {
-        value: this.state.todoInput,
-        completed: false,
-        id: ++newId
+        text: this.state.todoInput,
+        completed: false
       };
+
       this.setState(
         {
           todos: [...this.state.todos, todo],
-          idTodo: todo.id,
           todoInput: ""
         },
         () => {
           if (this.state.valueTab !== 1) {
+            console.log("after post: ", this.state.todos);
             this.setState({ currentTodo: this.state.todos });
           }
         }
