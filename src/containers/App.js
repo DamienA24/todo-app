@@ -33,7 +33,7 @@ class App extends Component {
     this.callBackendAPI();
   }
   callBackendAPI() {
-    api().then(results => this.setState({ todos: results.data.results[0] }));
+    api().then(results => this.setState({ currentTodo: results.data.results[0] }));
   }
 
   onChangeValueInputTodo(event) {
