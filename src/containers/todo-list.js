@@ -13,7 +13,7 @@ class TodoList extends Component {
     super();
   }
 
-  handleToggle = (value) => () => {
+  handleToggle = (value, todo) => () => {
     const { valueCheck } = this.props;
     const currentIndex = valueCheck.indexOf(value);
     const newChecked = [...valueCheck];
@@ -23,7 +23,7 @@ class TodoList extends Component {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    this.props.callbackUpdateCheckbox(newChecked, value);
+    this.props.callbackUpdateCheckbox(value, todo);
   };
 
   render() {
@@ -35,7 +35,7 @@ class TodoList extends Component {
               key={index}
               dense
               button
-              onClick={this.handleToggle(index)}
+              onClick={this.handleToggle(index, todo)}
             >
               <Checkbox
                 checked={this.props.valueCheck.indexOf(index) !== -1}

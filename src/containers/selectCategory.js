@@ -21,7 +21,6 @@ const SelectCategory = props => {
       <TodoList
         todos={props.todos}
         callbackDeleteTodo={props.callbackDeleteTodo}
-        callbackToggleCheckbox={props.callbackToggleCheckbox}
         value={props.valueTab}
         valueCheck={props.valueCheck}
         callbackUpdateCheckbox={props.callbackUpdateCheckbox}

@@ -18,7 +18,6 @@ class App extends Component {
     };
 
     this.onChangeValueInputTodo = this.onChangeValueInputTodo.bind(this);
-    this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
     this.changeValueCheck = this.changeValueCheck.bind(this);
     this.handleChangeTab = this.handleChangeTab.bind(this);
     this.updateCheckbox = this.updateCheckbox.bind(this);
@@ -33,7 +32,20 @@ class App extends Component {
     this.callBackendAPI();
   }
   callBackendAPI() {
-    api().then(results => this.setState({ currentTodo: results.data.results[0] }));
+    api().then(results => {
+      let newArray = results.data.results[0];
+      switch (this.state.valueTab) {
+        case 1:
+          newArray = newArray.filter(todo => todo.completed);
+          break;
+        case 2:
+          newArray = newArray.filter(todo => !todo.completed);
+          break;
+        default:
+          newArray;
+      }
+      this.setState({ todos: newArray }, () => this.changeValueCheck());
+    });
   }
 
   onChangeValueInputTodo(event) {
@@ -54,19 +66,14 @@ class App extends Component {
         text: this.state.todoInput,
         completed: false
       };
-      api("post", todo);
-      this.setState(
-        {
+      api("post", todo).then((results) => {
+        this.setState({
           todos: [...this.state.todos, todo],
           todoInput: ""
-        },
-        () => {
-          if (this.state.valueTab !== 1) {
-            console.log("after post: ", this.state.todos);
-            this.setState({ currentTodo: this.state.todos });
-          }
-        }
-      );
+        });
+      }).catch((err) => {
+        
+      });
     }
   }
 
@@ -86,60 +93,24 @@ class App extends Component {
     this.setState({ valueTab }, () => this.changeArray(valueTab));
   }
 
-  handleToggleCheckbox(valueIndexTodo) {
-    let newArray = this.state.currentTodo;
-    if (newArray[valueIndexTodo].completed) {
-      newArray[valueIndexTodo].completed = false;
+  updateCheckbox(index, todo) {
+    let newArray = this.state.todos;
+    if (newArray[index].completed) {
+      newArray[index].completed = false;
     } else {
-      newArray[valueIndexTodo].completed = true;
+      newArray[index].completed = true;
     }
-    const todo = newArray[valueIndexTodo]
+
     const url = `todos/${todo.id}`;
-    api("put", todo, url);
-
-    if (this.state.valueTab === 1) {
-      newArray = newArray.filter(todo => todo.completed);
-    } else if (this.state.valueTab === 2) {
-      newArray = newArray.filter(todo => !todo.completed);
-    }
-
-    this.setState(
-      {
-        currentTodo: newArray
-      },
-      () => this.changeValueCheck()
-    );
-  }
-
-  updateCheckbox(newChecked, valueTodoIndex) {
-    
-    this.setState(
-      {
-        valueChecked: newChecked
-      },
-      () => this.handleToggleCheckbox(valueTodoIndex)
-    );
+    api("put", todo, url).then(() => this.callBackendAPI());
   }
 
   changeArray(valueTab) {
-    let newArray = this.state.todos;
-    switch (valueTab) {
-      case 0:
-        newArray = this.state.todos;
-        break;
-      case 1:
-        newArray = newArray.filter(todo => todo.completed);
-        break;
-      case 2:
-        newArray = newArray.filter(todo => !todo.completed);
-        break;
-      default:
-    }
-    this.setState({ currentTodo: newArray }, () => this.changeValueCheck());
+    this.setState({ valueTab: valueTab }, () => this.callBackendAPI());
   }
 
   changeValueCheck() {
-    let todos = this.state.currentTodo;
+    let todos = this.state.todos;
     let newArrayCheck = [];
     let completed = [];
 
@@ -176,7 +147,7 @@ class App extends Component {
           callbackKeyPress={this.keyPressInput}
         />
         <SelectCategory
-          todos={this.state.currentTodo}
+          todos={this.state.todos}
           callbackDeleteTodo={this.deleteTodo}
           callbackChangeCategory={this.changeArray}
           valueTab={this.state.valueTab}
