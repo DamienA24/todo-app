@@ -3,6 +3,7 @@ import api from "./../callApi/api";
 
 import Input from "./../components/inputTodo";
 import SelectCategory from "./selectCategory";
+import CustomMessage from "./../components/displayMessage";
 import "../App.css";
 
 class App extends Component {
@@ -10,11 +11,12 @@ class App extends Component {
     super();
     this.state = {
       todos: [],
-      currentTodo: [],
-      idTodo: 0,
       todoInput: "",
       valueTab: 0,
-      valueChecked: []
+      valueChecked: [],
+      error: null,
+      displayMessage: false,
+      errorMessage: null
     };
 
     this.onChangeValueInputTodo = this.onChangeValueInputTodo.bind(this);
@@ -32,20 +34,24 @@ class App extends Component {
     this.callBackendAPI();
   }
   callBackendAPI() {
-    api().then(results => {
-      let newArray = results.data.results[0];
-      switch (this.state.valueTab) {
-        case 1:
-          newArray = newArray.filter(todo => todo.completed);
-          break;
-        case 2:
-          newArray = newArray.filter(todo => !todo.completed);
-          break;
-        default:
-          newArray;
-      }
-      this.setState({ todos: newArray }, () => this.changeValueCheck());
-    });
+    api()
+      .then(results => {
+        let newArray = results.data.results[0];
+        switch (this.state.valueTab) {
+          case 1:
+            newArray = newArray.filter(todo => todo.completed);
+            break;
+          case 2:
+            newArray = newArray.filter(todo => !todo.completed);
+            break;
+          default:
+            newArray;
+        }
+        this.setState({ todos: newArray }, () => this.changeValueCheck());
+      })
+      .catch(error => {
+        this.setState({ error }, () => this.setState({displayMessage: true, errorMessage: "oOps something went wrong!!"}));
+      });
   }
 
   onChangeValueInputTodo(event) {
@@ -66,13 +72,11 @@ class App extends Component {
         text: this.state.todoInput,
         completed: false
       };
-      api("post", todo).then((results) => {
+      api("post", todo).then(results => {
         this.setState({
           todos: [...this.state.todos, todo],
           todoInput: ""
         });
-      }).catch((err) => {
-        
       });
     }
   }
@@ -140,6 +144,8 @@ class App extends Component {
     return (
       <div className="App">
         <h2>To Do List</h2>
+        {this.state.displayMessage ? <CustomMessage errorMessage={this.state.errorMessage} /> : null}
+
         <Input
           callbackAddTodo={this.addTodo}
           valueTodo={this.state.todoInput}
