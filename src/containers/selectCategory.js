@@ -24,6 +24,7 @@ const SelectCategory = props => {
         value={props.valueTab}
         valueCheck={props.valueCheck}
         callbackUpdateCheckbox={props.callbackUpdateCheckbox}
+        callbackUpdateText={props.callbackUpdateText}
       />
     </Paper>
   );

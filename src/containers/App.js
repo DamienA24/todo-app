@@ -26,7 +26,9 @@ class App extends Component {
     this.callBackendAPI = this.callBackendAPI.bind(this);
     this.keyPressInput = this.keyPressInput.bind(this);
     this.changeArray = this.changeArray.bind(this);
+    this.updateTodo = this.updateTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+    this.updateText = this.updateText.bind(this);
     this.addTodo = this.addTodo.bind(this);
   }
 
@@ -50,7 +52,12 @@ class App extends Component {
         this.setState({ todos: newArray }, () => this.changeValueCheck());
       })
       .catch(error => {
-        this.setState({ error }, () => this.setState({displayMessage: true, errorMessage: "oOps something went wrong!!"}));
+        this.setState({ error }, () =>
+          this.setState({
+            displayMessage: true,
+            errorMessage: "oOps something went wrong!!"
+          })
+        );
       });
   }
 
@@ -104,7 +111,19 @@ class App extends Component {
     } else {
       newArray[index].completed = true;
     }
+    return this.updateTodo(todo);
+  }
 
+  updateText(newText, todo) {
+    const newTodo = {
+      completed: todo.completed === 0 ? false: true,
+      id: todo.id,
+      text: newText
+    };
+    return this.updateTodo(newTodo)
+  }
+
+  updateTodo(todo) {
     const url = `todos/${todo.id}`;
     api("put", todo, url).then(() => this.callBackendAPI());
   }
@@ -144,7 +163,9 @@ class App extends Component {
     return (
       <div className="App">
         <h2>To Do List</h2>
-        {this.state.displayMessage ? <CustomMessage errorMessage={this.state.errorMessage} /> : null}
+        {this.state.displayMessage ? (
+          <CustomMessage errorMessage={this.state.errorMessage} />
+        ) : null}
 
         <Input
           callbackAddTodo={this.addTodo}
@@ -160,6 +181,7 @@ class App extends Component {
           callbackChangeTab={this.handleChangeTab}
           valueCheck={this.state.valueChecked}
           callbackUpdateCheckbox={this.updateCheckbox}
+          callbackUpdateText={this.updateText}
         />
       </div>
     );

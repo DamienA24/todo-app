@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
+import SimplePopover from "../components/updateText";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItem from "@material-ui/core/ListItem";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -26,16 +27,16 @@ class TodoList extends Component {
     this.props.callbackUpdateCheckbox(value, todo);
   };
 
+  updateText = (todo, text) => {
+    this.props.callbackUpdateText(todo, text)
+  }
+
   render() {
     return (
       <div>
         <List>
           {this.props.todos.map((todo, index) => (
-            <ListItem
-              key={index}
-              dense
-              button
-            >
+            <ListItem key={index} dense button>
               <Checkbox
                 checked={this.props.valueCheck.indexOf(index) !== -1}
                 tabIndex={-1}
@@ -43,8 +44,11 @@ class TodoList extends Component {
                 color="primary"
                 onClick={this.handleToggle(index, todo)}
               />
-              <ListItemText primary={todo.text} />
-              <ListItemSecondaryAction
+              <SimplePopover text={todo.text}
+              todo={todo}
+              callbackUpdateText={this.updateText}/>
+{/*               <ListItemText primary={todo.text} />
+ */}              <ListItemSecondaryAction
                 onClick={e => this.props.callbackDeleteTodo(e, index, todo)}
               >
                 <Button color="secondary">
