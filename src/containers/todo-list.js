@@ -35,13 +35,13 @@ class TodoList extends Component {
               key={index}
               dense
               button
-              onClick={this.handleToggle(index, todo)}
             >
               <Checkbox
                 checked={this.props.valueCheck.indexOf(index) !== -1}
                 tabIndex={-1}
                 disableRipple
                 color="primary"
+                onClick={this.handleToggle(index, todo)}
               />
               <ListItemText primary={todo.text} />
               <ListItemSecondaryAction

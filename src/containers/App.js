@@ -36,7 +36,7 @@ class App extends Component {
   callBackendAPI() {
     api()
       .then(results => {
-        let newArray = results.data.results[0];
+        let newArray = results.data;
         switch (this.state.valueTab) {
           case 1:
             newArray = newArray.filter(todo => todo.completed);
